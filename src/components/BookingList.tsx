@@ -1,21 +1,15 @@
 import React from "react";
-import { Booking, Resource } from "../types";
+import { Booking } from "../types";
 import { formatDate } from "../utils/dateUtils";
 
 interface BookingListProps {
   bookings: Booking[];
-  resources: Resource[];
 }
 
-const BookingList: React.FC<BookingListProps> = ({ bookings, resources }) => {
+const BookingList: React.FC<BookingListProps> = ({ bookings }) => {
   if (bookings.length === 0) {
     return null;
   }
-
-  const getResourceName = (resourceId: string): string => {
-    const resource = resources.find((r) => r.id === resourceId);
-    return resource ? resource.name : "Unknown Resource";
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mt-6">
@@ -30,7 +24,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings, resources }) => {
                 Booking ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Resource
+                Resource ID
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Quantity
@@ -50,7 +44,7 @@ const BookingList: React.FC<BookingListProps> = ({ bookings, resources }) => {
                   {booking.id}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {getResourceName(booking.resourceId)}
+                  {booking.resourceId}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {booking.quantity}

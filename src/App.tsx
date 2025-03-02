@@ -37,9 +37,8 @@ function App() {
         const resourceData = await getResources();
         setResources(resourceData);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Failed to load resources. Please try again later.");
-        console.error("Error fetching resources:", err);
       } finally {
         setLoading(false);
       }
@@ -54,8 +53,8 @@ function App() {
         setLoadingBookings(true);
         const bookingData = await getBookings();
         setBookings(bookingData);
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
+      } catch {
+        return [];
       } finally {
         setLoadingBookings(false);
       }
@@ -84,7 +83,9 @@ function App() {
         setSelectedResource(null);
 
         const updatedBookings = await getBookings();
+        const updatedResources = await getResources();
         setBookings(updatedBookings);
+        setResources(updatedResources);
       } else {
         setNotification({
           show: true,
@@ -92,13 +93,12 @@ function App() {
           message: result.message || "Failed to create booking.",
         });
       }
-    } catch (err) {
+    } catch {
       setNotification({
         show: true,
         type: "error",
         message: "An unexpected error occurred. Please try again.",
       });
-      console.error("Error submitting booking:", err);
     }
   };
 
@@ -158,7 +158,7 @@ function App() {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           </div>
         ) : (
-          <BookingList bookings={bookings} resources={resources} />
+          <BookingList bookings={bookings} />
         )}
       </main>
 

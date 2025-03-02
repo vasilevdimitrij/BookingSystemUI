@@ -7,8 +7,7 @@ export const getResources = async (): Promise<Resource[]> => {
       throw new Error("Failed to fetch resources");
     }
     return await response.json();
-  } catch (error) {
-    console.error("Error fetching resources:", error);
+  } catch {
     return [];
   }
 };
@@ -27,8 +26,7 @@ export const getBookings = async (): Promise<Booking[]> => {
       endTime: new Date(booking.endTime),
       quantity: Number(booking.quantity),
     }));
-  } catch (error) {
-    console.error("Error fetching bookings:", error);
+  } catch {
     return [];
   }
 };
@@ -70,8 +68,7 @@ export const createBooking = async (
         quantity: Number(newBooking.quantity),
       },
     };
-  } catch (error) {
-    console.error("Error creating booking:", error);
+  } catch {
     return { success: false, message: "Error creating booking" };
   }
 };

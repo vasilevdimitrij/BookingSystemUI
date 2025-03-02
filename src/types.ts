@@ -1,7 +1,7 @@
 export interface Resource {
   id: string;
   name: string;
-  totalQuantity: number;
+  quantity: number;
 }
 
 export interface Booking {

@@ -16,8 +16,8 @@ const BookingForm: React.FC<BookingFormProps> = ({
   const [formData, setFormData] = useState<BookingFormData>({
     resourceId: "",
     quantity: 1,
-    startTime: formatDate(new Date()),
-    endTime: formatDate(new Date(Date.now() + 86400000)),
+    startTime: formatDate(new Date(), "en-US", true),
+    endTime: formatDate(new Date(Date.now() + 86400000), "en-US", true),
   });
 
   useEffect(() => {
@@ -34,10 +34,24 @@ const BookingForm: React.FC<BookingFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === "quantity" ? Math.max(1, parseInt(value) || 1) : value,
-    }));
+    setFormData((prev) => {
+      const newFormData = {
+        ...prev,
+        [name]: name === "quantity" ? Math.max(1, parseInt(value) || 1) : value,
+      };
+
+      if (name === "startTime") {
+        const newStartTime = new Date(value);
+        const formattedEndTime = formatDate(
+          new Date(newStartTime.getTime() + 86400000),
+          "en-US",
+          true
+        );
+        newFormData.endTime = formattedEndTime;
+      }
+
+      return newFormData;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -56,13 +70,13 @@ const BookingForm: React.FC<BookingFormProps> = ({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Quantity (Max: {resource.totalQuantity})
+            Quantity (Max: {resource.quantity})
           </label>
           <input
             type="number"
             name="quantity"
             min="1"
-            max={resource.totalQuantity}
+            max={resource.quantity}
             value={formData.quantity}
             onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
